@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incubator Control</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>Temperature: {{ temperature }} F</h1>
+        <h1>Humidity: {{ humidity }} %</h1>
+        <h1>Heater: {{ heater_status }}</h1>
+        <h1>Cooler: {{ cooler_status }}</h1>
+        <h1>Humidifier: {{ humidifier_status }}</h1>
+        <h1>Dehumidifier: {{ dehumidifier_status }}</h1>
+    </div>
+    <div class="controls">
+        <form action="/start" method="get">
+            <input type="submit" class="control-btn" value="Start Incubation">
+        </form>
+        <form action="/data" method="get">
+            <input type="submit" class="control-btn" value="View Data">
+        </form>
+    </div>
+</body>
+</html>

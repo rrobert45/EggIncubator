@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incubator Data</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <table>
+            <tr>
+                <th>Timestamp</th>
+                <th>Temperature (F)</th>
+                <th>Humidity (%)</th>
+            </tr>
+            {% for row in data.iterrows() %}
+            <tr>
+                <td>{{ row[1]["Timestamp"] }}</td>
+                <td>{{ row[1]["Temperature"] }}</td>
+                <td>{{ row[1]["Humidity"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="controls">
+        <form action="/" method="get">
+            <input type="submit" class="control-btn" value="Go Back">
+        </form>
+    </div>
+</body>
+</html>

@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 class IncubatorApp:
     def __init__(self):
-        # Set the sensor type and the pin number where the sensor is connected
+        # Set the sensor type and the pin number where the sensor is connected. 
         self.sensor = Adafruit_DHT.DHT22
         self.pin = 4
 

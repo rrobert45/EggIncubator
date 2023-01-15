@@ -153,6 +153,7 @@ def index():
 def start_incubation():
     incubator_app = IncubatorApp()
     incubator_app.save_start_date()
+    incubator_app.load_start_date()
     return redirect('/')
 
 if __name__ == "__main__":

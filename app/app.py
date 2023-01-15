@@ -133,6 +133,14 @@ class IncubatorApp:
             # If the file doesn't exist or there's an error reading it, set the start date to None
             self.start_date = None
             self.current_day = None
+
+    def calculate_current_day(self):
+        if self.start_date:
+            current_date = datetime.datetime.now()
+            current_day = (current_date - self.start_date).days
+            return current_day
+        else:
+            return None
         
 @app.route("/")
 def index():

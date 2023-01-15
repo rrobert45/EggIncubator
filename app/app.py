@@ -28,7 +28,7 @@ class IncubatorApp:
         self.waiting_time = 10
         
         # Set the incubation start day
-        self.start_day = None
+        self.start_date = None
         self.current_day = None
 
         # Set up the GPIO library
@@ -145,10 +145,10 @@ def data():
 
 @app.route('/start', methods=['GET'])
 def start_incubation():
-    incubator.start_date = datetime.now()
+    incubator_app.start_date = datetime.now()
     with open('startdate.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['start_date', incubator.start_date])
+        writer.writerow(['start_date', incubator_app.start_date])
     return redirect('/')
     
 if __name__ == '__main__':

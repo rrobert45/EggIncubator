@@ -51,16 +51,7 @@ class IncubatorApp:
             writer = csv.DictWriter(f, fieldnames=["temperature", "humidity", "timestamp"])
             writer.writerow(data)
             
-    def start_incubation(self):
-        self.start_date = datetime.datetime.now()
-        with open("startdate.csv", "w") as f:
-            writer = csv.DictWriter(f, fieldnames=["start_date"])
-            writer.writerow({"start_date": self.start_date})
-
-    def update_current_day(self):
-        if self.start_date:
-            current_date = datetime.datetime.now()
-            self.current_day = (current_date - self.start_date).days
+    
 
     def update_values(self):
         # Read the temperature and humidity from the sensor
@@ -111,7 +102,7 @@ class IncubatorApp:
             # Return the current temperature, humidity, and status of the power relays
         return temperature_f, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status
 
-    def start_incubation(self):
+    def save_start_date(self):
         # Set the incubation start date to the current date and time
         self.start_date = datetime.datetime.now()
         

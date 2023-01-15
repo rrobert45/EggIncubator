@@ -6,6 +6,8 @@ import csv
 import pandas as pd
 import datetime
 
+start_date = None
+
 app = Flask(__name__)
 
 class IncubatorApp:

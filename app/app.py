@@ -52,6 +52,10 @@ class IncubatorApp:
             writer.writerow(data)
             
     
+    def update_current_day(self):
+        if self.start_date:
+            current_date = datetime.datetime.now()
+            self.current_day = (current_date - self.start_date).days
 
     def update_values(self):
         # Read the temperature and humidity from the sensor
@@ -101,6 +105,8 @@ class IncubatorApp:
             self.current_day = None
             # Return the current temperature, humidity, and status of the power relays
         return temperature_f, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status
+
+
 
     def save_start_date(self):
         # Set the incubation start date to the current date and time

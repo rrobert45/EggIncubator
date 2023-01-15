@@ -106,9 +106,7 @@ def update_values(self):
     else:
         self.current_day = None
         # Return the current temperature, humidity, and status of the power relays
-        return temperature_f, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status
-    except:
-        return None, None, None, None, None, None
+    return temperature_f, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status
 
 def start_incubation(self):
     # Set the incubation start date to the current date and time

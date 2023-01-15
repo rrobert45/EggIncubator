@@ -145,11 +145,9 @@ class IncubatorApp:
 def index():
     incubator_app = IncubatorApp()
     temperature, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status = incubator_app.update_values()
-    current_day = incubator_app.calculate_current_day()
-    start_day=incubator_app.load_start_date()
-    return render_template("index.html", temperature=temperature, humidity=humidity, heater_status=heater_status, 
-                           cooler_status=cooler_status, humidifier_status=humidifier_status, 
-                           dehumidifier_status=dehumidifier_status, current_day=current_day, start_day=start_day)
+    current_day = incubator_app.current_day
+    return render_template("index.html", temperature=temperature, humidity=humidity, heater_status=heater_status, cooler_status=cooler_status, humidifier_status=humidifier_status, dehumidifier_status=dehumidifier_status, start_date=incubator_app.start_date, current_day=current_day)
+
 
 @app.route("/start_incubation", methods=["POST"])
 def start_incubation():

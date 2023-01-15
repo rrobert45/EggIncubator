@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect 
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 import time
@@ -147,16 +147,16 @@ def index():
     incubator_app = IncubatorApp()
     temperature, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status = incubator_app.update_values()
     current_day = incubator_app.calculate_current_day()
-    start_date = incubator_app.load_start_date()
+    start_day = incubator_app.start_date
     return render_template("index.html", temperature=temperature, humidity=humidity, heater_status=heater_status, 
                            cooler_status=cooler_status, humidifier_status=humidifier_status, 
-                           dehumidifier_status=dehumidifier_status, current_day=current_day, start_date=start_date)
+                           dehumidifier_status=dehumidifier_status, current_day=current_day, start_day=start_day)
 
 @app.route("/start_incubation", methods=["POST"])
 def start_incubation():
     incubator_app = IncubatorApp()
     incubator_app.save_start_date()
-    return "Incubation started!"
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

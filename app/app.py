@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import time
 import csv
 import pandas as pd
+import datetime
 
 app = Flask(__name__)
 
@@ -89,6 +90,10 @@ class IncubatorApp:
             GPIO.output(self.humidifier_relay_pin, GPIO.HIGH)
             humidifier_status = "ON"
         
+        if self.start_date is not None:
+            self.current_day = (datetime.now() - self.start_date).days + 1
+        else:
+            self.current_day = None
         # Check if the incubation start day is set
         if self.start_day:
             self.current_day = (time.time() - self.start_day) // (24*3600) + 1
@@ -112,6 +117,17 @@ class IncubatorApp:
         with open("data.csv", "a") as f:
             writer = csv.writer(f)
             writer.writerow(["Start Day", self.start_day])
+
+    def retrieve_start_date():
+        with open('startdate.csv', 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row[0] == 'start_date':
+                    start_date = row[1]
+                    return start_date
+        return None
+
+    
             
 @app.route('/')
 def index():
@@ -126,6 +142,14 @@ def start():
 def data():
     data = pd.read_csv("data.csv")
     return render_template("data.html", data=data)
+
+@app.route('/start', methods=['GET'])
+def start_incubation():
+    incubator.start_date = datetime.now()
+    with open('startdate.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['start_date', incubator.start_date])
+    return redirect('/')
     
 if __name__ == '__main__':
     incubator_app = IncubatorApp()

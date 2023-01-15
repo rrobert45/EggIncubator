@@ -28,7 +28,7 @@ class IncubatorApp:
         self.waiting_time = 10
         
         # Set the incubation start day
-        self.start_date = None
+        self.start_date = datetime.datetime.now()
         self.current_day = None
 
         # Set up the GPIO library

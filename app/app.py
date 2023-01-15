@@ -111,6 +111,8 @@ class IncubatorApp:
     def save_start_date(self):
         # Set the incubation start date to the current date and time
         self.start_date = datetime.datetime.now()
+    
+    
         
         # Save the incubation start date to a csv file
         with open("startdate.csv", "w") as f:
@@ -144,7 +146,7 @@ def index():
     incubator_app = IncubatorApp()
     temperature, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status = incubator_app.update_values()
     current_day = incubator_app.calculate_current_day()
-    start_day = incubator_app.start_date
+    start_day=start_day
     return render_template("index.html", temperature=temperature, humidity=humidity, heater_status=heater_status, 
                            cooler_status=cooler_status, humidifier_status=humidifier_status, 
                            dehumidifier_status=dehumidifier_status, current_day=current_day, start_day=start_day)
@@ -154,6 +156,7 @@ def start_incubation():
     incubator_app = IncubatorApp()
     incubator_app.save_start_date()
     incubator_app.load_start_date()
+
     return redirect('/')
 
 if __name__ == "__main__":

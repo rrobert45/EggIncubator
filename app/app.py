@@ -110,15 +110,12 @@ class IncubatorApp:
 
     def save_start_date(self):
         # Set the incubation start date to the current date and time
-        incubator_app = IncubatorApp()
-        incubator_app.start_date = datetime.datetime.now()
-    
-    
-        
+        self.start_date = datetime.datetime.now()
+        self.update_current_day()
         # Save the incubation start date to a csv file
         with open("startdate.csv", "w") as f:
             writer = csv.writer(f)
-            writer.writerow([incubator_app.start_date])
+            writer.writerow([self.start_date])
             
     def load_start_date(self):
         try:

@@ -65,6 +65,8 @@ class IncubatorApp:
         humidity = round(humidity, 2)
         self.log_data(temperature_f, humidity)
         self.update_current_day()
+        if self.start_date is not None:
+            self.update_current_day()
         # Check if the temperature is above the threshold
         if temperature > self.temp_threshold:
             # Turn on the cooler

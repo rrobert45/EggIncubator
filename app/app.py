@@ -113,20 +113,20 @@ class IncubatorApp:
             writer = csv.writer(f)
             writer.writerow(["Start Day", self.start_day])
             
-    @app.route('/')
-    def index():
-        temperature, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status = incubator_app.update_values()
-        return render_template('index.html', temperature=temperature, humidity=humidity, heater_status=heater_status, cooler_status=cooler_status, humidifier_status=humidifier_status, dehumidifier_status=dehumidifier_status)
-    @app.route('/start')
-    def start():
-        incubator_app.set_start_day()
-        return "Incubation started!"
+@app.route('/')
+def index():
+    temperature, humidity, heater_status, cooler_status, humidifier_status, dehumidifier_status = incubator_app.update_values()
+    return render_template('index.html', temperature=temperature, humidity=humidity, heater_status=heater_status, cooler_status=cooler_status, humidifier_status=humidifier_status, dehumidifier_status=dehumidifier_status)
+@app.route('/start')
+def start():
+    incubator_app.set_start_day()
+    return "Incubation started!"
+
+@app.route('/data')
+def data():
+    data = pd.read_csv("data.csv")
+    return render_template("data.html", data=data)
     
-    @app.route('/data')
-    def data():
-        data = pd.read_csv("data.csv")
-        return render_template("data.html", data=data)
-        
-    if __name__ == '__main__':
-        incubator_app = IncubatorApp()
-        app.run(debug=True, host='0.0.0.0')
+if __name__ == '__main__':
+    incubator_app = IncubatorApp()
+    app.run(debug=True, host='0.0.0.0')

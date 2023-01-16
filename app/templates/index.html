@@ -1,55 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Incubator Control</title>
+    <title>Temperature and Humidity Monitor</title>
     <style>
+        /* Add a dark theme */
         body {
+            background-color: #333;
+            color: white;
             font-family: Arial, sans-serif;
         }
-        .dark-theme {
-            background-color: #333333;
-            color: #f2f2f2;
+
+        /* Add some padding and margins for spacing */
+        h1, p, table {
+            padding: 10px;
+            margin: 10px;
         }
-        .container {
-            text-align: center;
-            padding: 20px;
+
+        /* Add a border and some padding to the table */
+        table {
+            border-collapse: collapse;
+            border: 1px solid white;
+            padding: 10px;
         }
-        .controls {
-            text-align: center;
-            margin-top: 20px;
+
+        /* Add a hover effect to the table rows */
+        tr:hover {
+            background-color: #555;
         }
-        .control-btn {
-            background-color: #4CAF50; /* Green */
-            border: none;
+
+        /* Add some spacing between table cells */
+        td {
+            padding: 5px;
+        }
+
+        /* Add a class for the last turn time */<!DOCTYPE html>
+<html>
+<head>
+    <title>Temperature and Humidity Monitor</title>
+    <style>
+        /* Add a dark theme */
+        body {
+            background-color: #333;
             color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Add some padding and margins for spacing */
+        h1, p, table {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        /* Add a border and some padding to the table */
+        table {
+            border-collapse: collapse;
+            border: 1px solid white;
+            padding: 10px;
+        }
+
+        /* Add a hover effect to the table rows */
+        tr:hover {
+            background-color: #555;
+        }
+
+        /* Add some spacing between table cells */
+        td {
+            padding: 5px;
+        }
+
+        /* Add a class for the last turn time */
+        .last-turn-time {
+            font-size: smaller;
+            color: gray;
         }
     </style>
 </head>
-<body class="dark-theme">
-    <div class="container">
-        <h1>Temperature: {{ temperature }} F</h1>
-        <h1>Humidity: {{ humidity }} %</h1>
-        <h1>Heater: {{ heater_status }}</h1>
-        <h1>Cooler: {{ cooler_status }}</h1>
-        <h1>Humidifier: {{ humidifier_status }}</h1>
-        <h1>Dehumidifier: {{ dehumidifier_status }}</h1>
-        <h1>Start Day: {{ start_date }}</h1>
-        <h1>Current Day: {{ current_day }}</h1>
-    </div>
-    <div class="controls">
-        <form action="/start_incubation" method="post">
-            <input type="submit" class="control-btn" value="Start Incubation">
-        </form>
-        <form action="/data" method="get">
-            <input type="submit" class="control-btn" value="View Data">
-        </form>
-    </div>
+<body>
+    <h1>Temperature and Humidity Monitor</h1>
+    <table>
+        <tr>
+            <td>Temperature</td>
+            <td>{{ temperature }} C</td>
+        </tr>
+        <tr>
+            <td>Humidity</td>
+            <td>{{ humidity }} %</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Heater</td>
+            <td>{{ heat_status }}</td>
+        </tr>
+        <tr>
+            <td>Humidifier</td>
+            <td>{{ humidifier_status }}</td>
+        </tr>
+        <tr>
+            <td>Egg Turner</td>
+            <td>{{ egg_turner_status }}</td>
+        </tr>
+    </table>
+    <p class="last-turn-time">Last turn time: {{ last_turn_time }}</p>
+</body>
+</html>
+        .last-turn-time {
+            font-size: smaller;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>Temperature and Humidity Monitor</h1>
+    <table>
+        <tr>
+            <td>Temperature</td>
+            <td>{{ temperature }} C</td>
+        </tr>
+        <tr>
+            <td>Humidity</td>
+            <td>{{ humidity }} %</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>Heater</td>
+            <td>{{ heat_status }}</td>
+        </tr>
+        <tr>
+            <td>Humidifier</td>
+            <td>{{ humidifier_status }}</td>
+        </tr>
+        <tr>
+            <td>Egg Turner</td>
+            <td>{{ egg_turner_status }}</td>
+        </tr>
+    </table>
+    <p class="last-turn-time">Last turn time: {{ last_turn_time }}</p>
 </body>
 </html>

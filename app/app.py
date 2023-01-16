@@ -1,80 +1,84 @@
-from flask import Flask, render_template
-import RPi.GPIO as GPIO
-import time
 import Adafruit_DHT
+import datetime
+import csv
+import time
+import RPi.GPIO as GPIO
+import json
 
-app = Flask(__name__)
+# Reading config file
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
 
-# Set the GPIO pin number for the DHT22 sensor
-DHT22 = Adafruit_DHT.DHT22
-dht_pin = 4
+DHT_SENSOR = Adafruit_DHT.DHT22
+DHT_PIN = config['dht_pin']
+RELAY_HUMIDITY = config['relay_humidity']
+RELAY_TEMPERATURE = config['relay_temperature']
+RELAY_EGG_TURNER = config['relay_egg_turner']
+DESIRED_HUMIDITY = config['desired_humidity']
+DESIRED_TEMPERATURE = config['desired_temperature']
+START_DATE = datetime.datetime.strptime(config['start_date'], '%Y-%m-%d %H:%M:%S')
 
-# Set the GPIO pin numbers for the relays
-heat_relay_pin = 17
-humidifier_relay_pin = 27
-egg_turner_relay_pin = 22
-
-# Set the temperature and humidity thresholds
-temp_threshold = 50
-humidity_threshold = 20
-
-# Initialize the GPIO pins
+# Setting up GPIO pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(heat_relay_pin, GPIO.OUT)
-GPIO.setup(humidifier_relay_pin, GPIO.OUT)
-GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
+GPIO.setup(RELAY_HUMIDITY, GPIO.OUT)
+GPIO.setup(RELAY_TEMPERATURE, GPIO.OUT)
+GPIO.setup(RELAY_EGG_TURNER, GPIO.OUT)
+GPIO.setwarnings(False)
 
-# Set the egg turner interval time
-egg_turner_interval = 4*60*60  # 4 hours in seconds
+def read_sensor():
+    humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+    return humidity, temperature
 
-# Get the current time
-start_time = time.time()
+def control_humidity():
+    humidity, _ = read_sensor()
+    if humidity < DESIRED_HUMIDITY:
+        GPIO.output(RELAY_HUMIDITY, GPIO.HIGH)
+    else:
+        GPIO.output(RELAY_HUMIDITY, GPIO.LOW)
 
+def control_temperature():
+    _, temperature = read_sensor()
+    if temperature < DESIRED_TEMPERATURE:
+        GPIO.output(RELAY_TEMPERATURE, GPIO.HIGH)
+    else:
+        GPIO.output(RELAY_TEMPERATURE, GPIO.LOW)
 
+def control_egg_turner():
+    current_time = datetime.datetime.now()
+    egg_turner_status = GPIO.input(RELAY_EGG_TURNER)
+    if (current_time - last_egg_turn_time).seconds > 4*60*60 and egg_turner_status == 0:
+        GPIO.output(RELAY_EGG_TURNER, GPIO.HIGH)
+        time.sleep(10)
+        GPIO.output(RELAY_EGG_TURNER, GPIO.LOW)
+        last_egg_turn_time = current_time
+
+def increase_humidity():
+    current_day = (datetime.datetime.now() - START_DATE).days
+    if current_day == 19:
+        DESIRED_HUMIDITY = 70
+
+def save_data():
+    humidity, temperature = read_sensor()
+    current_time = datetime.datetime.now()
+    egg_turner_status = GPIO.input(RELAY_EGG_TURNER)
+    with open('data.csv', mode='a') as data_file:
+        data_writer = csv.writer(data_file)
+        data_writer.writerow([current_time, temperature, humidity, egg_turner_status])
+
+def display_data():
+    # code to display data on web page
+    pass
+
+last_egg_turn_time = datetime.datetime.now()
+
+# Main loop that runs every 10 minutes
 while True:
-    # Read the temperature and humidity from the DHT22 sensor
-    humidity, temperature = Adafruit_DHT.read_retry(DHT22, dht_pin)
+    control_humidity()
+    control_temperature()
+    control_egg_turner()
+    increase_humidity()
+    save_data()
+    time.sleep(10*60)
 
-    # Check if the temperature is below the threshold
-    if temperature < temp_threshold:
-        # Turn on the heat source
-        heat_status = "On"
-        GPIO.output(heat_relay_pin, GPIO.HIGH)
-    else:
-        # Turn off the heat source
-        heat_status = "Off"
-        GPIO.output(heat_relay_pin, GPIO.LOW)
-
-    # Check if the humidity is above the threshold
-    if humidity > humidity_threshold:
-        # Turn off the humidifier
-        humidifier_status = "Off"
-        GPIO.output(humidifier_relay_pin, GPIO.LOW)
-    else:
-        # Turn on the humidifier
-        humidifier_status = "On"
-        GPIO.output(humidifier_relay_pin, GPIO.HIGH)
-
-    # Check if it's time to turn the eggs
-    if (time.time() - start_time) > egg_turner_interval:
-        # Turn on the egg turner for 5 seconds
-        egg_turner_status = "On"
-        GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
-        time.sleep(5)
-        GPIO.output(egg_turner_relay_pin, GPIO.LOW)
-        egg_turner_status = "Off"
-        last_turn_time = time.time()
-        # Reset the start time
-        start_time = time.time()
-
-    # Wait for a few seconds before reading the sensor again
-    time.sleep(5)
-
-
-
-@app.route("/")
-def index():
-    return render_template("index.html", temperature=temperature, humidity=humidity, heat_status=heat_status, humidifier_status=humidifier_status, egg_turner_status=egg_turner_status, last_turn_time=last_turn_time)
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+# Cleanup
+GPIO.cleanup()

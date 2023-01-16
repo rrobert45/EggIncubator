@@ -1,0 +1,9 @@
+{
+    "dht_pin": 4,
+    "relay_humidity": 17,
+    "relay_temperature": 27,
+    "relay_egg_turner": 22,
+    "desired_humidity": 50,
+    "desired_temperature": 100.5,
+    "start_date": "2023-01-15 00:00:00"
+}

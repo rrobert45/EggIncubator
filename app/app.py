@@ -79,5 +79,5 @@ except KeyboardInterrupt:
 def index():
     return render_template("index.html", temperature=temperature, humidity=humidity, heat_status=heat_status, humidifier_status=humidifier_status, egg_turner_status=egg_turner_status, last_turn_time=last_turn_time)
 
-if name == "main":
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
